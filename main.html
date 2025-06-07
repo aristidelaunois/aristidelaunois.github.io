@@ -2,48 +2,173 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aristide Launois</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aristide Launois | MMath Student & Research</title>
   <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px 40px;
+      background: #f9f9f9;
+      color: #333;
       line-height: 1.6;
-      background-color: #ffffff;
-      color: #000000;
     }
     h1 {
       color: #2c3e50;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+    }
+    p.subtitle {
+      font-style: italic;
+      color: #666;
+      margin-top: 0;
+      margin-bottom: 1.5em;
     }
     a {
-      color: #3498db;
+      color: #2a7ae2;
       text-decoration: none;
     }
     a:hover {
       text-decoration: underline;
+    }
+    /* Tabs container */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      margin-right: 10px;
+      font-weight: 600;
+      color: #555;
+      background: #eee;
+      border-radius: 8px 8px 0 0;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .tab.active {
+      background: #fff;
+      color: #2c3e50;
+      border-color: #ddd #ddd #fff;
+      font-weight: 700;
+    }
+    /* Content for each tab */
+    .tab-content {
+      background: #fff;
+      padding: 20px 25px;
+      border: 1px solid #ddd;
+      border-radius: 0 8px 8px 8px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
+    }
+    /* Papers list styling */
+    ul.papers-list {
+      padding-left: 20px;
+      max-width: 700px;
+    }
+    ul.papers-list li {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    ul.papers-list li a {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    /* Workshops list */
+    ul.workshops-list {
+      padding-left: 20px;
+      max-width: 700px;
+    }
+    ul.workshops-list li {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    /* CV link styling */
+    .cv-link {
+      margin-bottom: 30px;
+      font-weight: 600;
+      display: inline-block;
+      background: #2a7ae2;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .cv-link:hover {
+      background: #1a5bb8;
+    }
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .tabs {
+        flex-direction: column;
+      }
+      .tab {
+        margin-bottom: 8px;
+        border-radius: 8px;
+      }
+      .tab.active {
+        border-radius: 8px;
+      }
     }
   </style>
 </head>
 <body>
 
   <h1>Aristide Launois</h1>
-  <p>5th year MMath student at the University of Edinburgh</p>
+  <p class="subtitle">5th Year MMath Student at the University of Edinburgh</p>
 
-  <p>
-    <strong>Curriculum Vitae:</strong>
-    <a href="CV_current.pdf" target="_blank">Download CV (PDF) (unfinished)</a>
-  </p>
+  <a href="CV_current.pdf" target="_blank" class="cv-link">Download CV (PDF) (unfinished)</a>
 
-  <h2>Selected Papers/Projects</h2>
-  <ul>
-    <li>
-      <a href="Group_Project___Coding_Theory__excerpts_by_me.pdf" target="_blank">
-        Algebraic Coding Theory
-      </a> – Excerpts from a group project on coding theory supervised by Agata Smoktunowicz.
-    </li>
-  </ul>
+  <div class="tabs">
+    <div class="tab active" data-tab="papers">Selected Papers</div>
+    <div class="tab" data-tab="workshops">Workshops & Training</div>
+  </div>
+
+  <div id="papers" class="tab-content">
+    <ul class="papers-list">
+      <li>
+        <a href="Group_Project___Coding_Theory__excerpts_by_me.pdf" target="_blank">
+          Algebraic Coding Theory
+        </a> – Excerpts from a group project on coding theory supervised by Agata Smoktunowicz.
+      </li>
+    </ul>
+  </div>
+
+  <div id="workshops" class="tab-content" style="display:none;">
+    <ul class="workshops-list">
+      <li>LMS Summer School – Bath, UK, July 2025</li>
+      <li>AESIM Flavours of Representation Theory Workshop – Shillong, India, July 2025</li>
+    </ul>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        // Hide all content
+        contents.forEach(c => c.style.display = 'none');
+
+        // Activate current tab and content
+        tab.classList.add('active');
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(tabId).style.display = 'block';
+      });
+    });
+  </script>
 
 </body>
 </html>
+
