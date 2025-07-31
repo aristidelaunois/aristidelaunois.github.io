@@ -54,12 +54,17 @@
       border-radius: 8px 8px 0 0;
       user-select: none;
       transition: background-color 0.3s ease, color 0.3s ease;
+      outline: none;
     }
     .tab.active {
       background: #fff;
       color: #2c3e50;
       border-color: #ddd #ddd #fff;
       font-weight: 700;
+    }
+    .tab:focus {
+      outline: 2px solid #2a7ae2;
+      outline-offset: 2px;
     }
     /* Content for each tab */
     .tab-content {
@@ -69,7 +74,7 @@
       border-radius: 0 8px 8px 8px;
       box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
     }
-    /* Papers list styling */
+    /* Papers/projects list styling */
     ul.papers-list {
       padding-left: 20px;
       max-width: 700px;
@@ -91,9 +96,26 @@
       margin-bottom: 12px;
       font-size: 0.95rem;
     }
-    /* CV link styling */
+    /* Certificates list */
+    ul.certificates-list {
+      padding-left: 20px;
+      max-width: 700px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    ul.certificates-list li {
+      margin-bottom: 8px;
+    }
+    ul.certificates-list li a {
+      color: #2a7ae2;
+      text-decoration: none;
+    }
+    ul.certificates-list li a:hover {
+      text-decoration: underline;
+    }
+    /* CV link styling inside About Me */
     .cv-link {
-      margin-bottom: 30px;
+      margin-top: 15px;
       font-weight: 600;
       display: inline-block;
       background: #2a7ae2;
@@ -126,27 +148,97 @@
   <h1>Aristide Launois' Personal Webpage (UNFINISHED)</h1>
   <p class="subtitle">5th Year MMath Student at the University of Edinburgh</p>
 
-  <a href="CV__current_.pdf" target="_blank" class="cv-link">Download CV (PDF)</a>
-
-  <div class="tabs">
-    <div class="tab active" data-tab="papers">Example Projects</div>
-    <div class="tab" data-tab="workshops">Experience</div>
+  <div class="tabs" role="tablist" aria-label="Main tabs">
+    <div
+      class="tab active"
+      role="tab"
+      aria-selected="true"
+      tabindex="0"
+      data-tab="about"
+      id="tab-about"
+      aria-controls="about"
+    >
+      About Me
+    </div>
+    <div
+      class="tab"
+      role="tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-tab="projects"
+      id="tab-projects"
+      aria-controls="projects"
+    >
+      Projects
+    </div>
+    <div
+      class="tab"
+      role="tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-tab="experience"
+      id="tab-experience"
+      aria-controls="experience"
+    >
+      Experience
+    </div>
   </div>
 
-  <div id="papers" class="tab-content">
+  <div
+    id="about"
+    class="tab-content"
+    role="tabpanel"
+    aria-labelledby="tab-about"
+  >
+    <p>Hello! I'm Aristide Launois, a 5th Year MMath student at the University of Edinburgh with a keen interest in algebra, coding theory, and representation theory. This webpage showcases some of my projects, experiences, and academic journey.</p>
+    <a href="CV__current_.pdf" target="_blank" class="cv-link" rel="noopener noreferrer">Download CV (PDF)</a>
+  </div>
+
+  <div
+    id="projects"
+    class="tab-content"
+    role="tabpanel"
+    aria-labelledby="tab-projects"
+    style="display:none;"
+  >
     <ul class="papers-list">
       <li>
-        <a href="Coding_Theory__excerpts_.pdf" target="_blank">
+        <a href="Coding_Theory__excerpts_.pdf" target="_blank" rel="noopener noreferrer">
           Algebraic Coding Theory
         </a> – Excerpts from a group project on coding theory supervised by Agata Smoktunowicz.
       </li>
     </ul>
   </div>
 
-  <div id="workshops" class="tab-content" style="display:none;">
+  <div
+    id="experience"
+    class="tab-content"
+    role="tabpanel"
+    aria-labelledby="tab-experience"
+    style="display:none;"
+  >
     <ul class="workshops-list">
-      <li>LMS Summer School – Bath, UK, July 2025 (POTENTIAL FUTURE)</li>
-      <li>AESIM Flavours of Representation Theory Workshop – Shillong, India, July 2025 (POTENTIAL FUTURE)</li>
+      <li>
+        LMS Summer School – Bath, UK, July 2025
+        <ul class="certificates-list">
+          <!-- Example certificate link for future event -->
+          <li><a href="LMS-O-Lanois.pdf" target="_blank" rel="noopener noreferrer">Certificate of Participation</a></li>
+        </ul>
+      </li>
+      <li>
+        AESIM Flavours of Representation Theory Workshop – Shillong, India, July 2025
+        <ul class="certificates-list">
+          <!-- Example certificate link for future event -->
+          <!-- <li><a href="certificate_aesim_workshop.pdf" target="_blank" rel="noopener noreferrer">Certificate of Attendance</a></li> -->
+        </ul>
+      </li>
+      <li>
+        Math IntroSeries Course 1 - "Generalized Weyl Algebras and their Representations", Online, June/July 2025
+        <ul class="certificates-list">
+          <!-- Example certificate link for future event -->
+          <li><a href="Aristide F.J.C. Launois_Certificate of Participation.pdf" target="_blank" rel="noopener noreferrer">Certificate of Participation</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 
@@ -154,21 +246,63 @@
     const tabs = document.querySelectorAll('.tab');
     const contents = document.querySelectorAll('.tab-content');
 
+    function activateTab(newTab) {
+      tabs.forEach(tab => {
+        const isActive = tab === newTab;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+
+      contents.forEach(c => {
+        c.style.display = c.id === newTab.getAttribute('data-tab') ? 'block' : 'none';
+      });
+
+      // Focus the activated tab for accessibility
+      newTab.focus();
+    }
+
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Remove active class from all tabs
-        tabs.forEach(t => t.classList.remove('active'));
-        // Hide all content
-        contents.forEach(c => c.style.display = 'none');
+        activateTab(tab);
+      });
 
-        // Activate current tab and content
-        tab.classList.add('active');
-        const tabId = tab.getAttribute('data-tab');
-        document.getElementById(tabId).style.display = 'block';
+      tab.addEventListener('keydown', (e) => {
+        const currentIndex = Array.from(tabs).indexOf(e.target);
+        let newIndex = null;
+
+        switch(e.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+            newIndex = (currentIndex + 1) % tabs.length;
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            e.preventDefault();
+            break;
+          case 'Home':
+            newIndex = 0;
+            e.preventDefault();
+            break;
+          case 'End':
+            newIndex = tabs.length -1;
+            e.preventDefault();
+            break;
+          case 'Enter':
+          case 'Space':
+            activateTab(e.target);
+            e.preventDefault();
+            break;
+        }
+
+        if (newIndex !== null) {
+          tabs[newIndex].focus();
+        }
       });
     });
   </script>
 
 </body>
 </html>
-
